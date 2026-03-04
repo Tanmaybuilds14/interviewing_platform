@@ -1,10 +1,26 @@
-import express from 'express'
+import express from 'express';
+import path from 'path';
 import { ENV } from './lib/env.js';
 const app = express();
 
-app.get("/" ,(req,res)=>{
-  res.status(200).json({msg:"success from frontend"});
+
+const __dirname=path.resolve();
+
+app.get("/health" ,(req,res)=>{
+  res.status(200).json({msg:"success from health"});
 });
 
-app.listen(3000, ()=>console.log(`server is running on port ${ENV.PORT} https://localhost:${ENV.PORT}`));
+app.get("/books" ,(req,res)=>{
+  res.status(200).json({msg:"success from books"});
+});
+
+if(ENV.NODE_ENV === "production"){
+  app.use(express.static(path.join(__dirname,"../frontend/dist")));
+
+  app.get("/{*any}" , (req,res)=>{
+    res.sendFile(path.join(__dirname,"../frontend", "dist" , "index.html"));
+  });
+}
+
+app.listen(3000, ()=>console.log(`server is running on port ${ENV.PORT} https://localhost:3000`));
 
