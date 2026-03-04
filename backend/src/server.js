@@ -1,10 +1,11 @@
 import express from 'express';
 import path from 'path';
+import { fileURLToPath } from 'url';
 import { ENV } from './lib/env.js';
 const app = express();
 
-
-const __dirname=path.resolve();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 app.get("/health" ,(req,res)=>{
   res.status(200).json({msg:"success from health"});
@@ -15,12 +16,16 @@ app.get("/books" ,(req,res)=>{
 });
 
 if(ENV.NODE_ENV === "production"){
-  app.use(express.static(path.join(__dirname,"../frontend/dist")));
+  // Serve static files from frontend dist folder
+  const frontendDist = path.join(__dirname, "../../frontend/dist");
+  app.use(express.static(frontendDist));
 
-  app.get("/{*any}" , (req,res)=>{
-    res.sendFile(path.join(__dirname,"../frontend", "dist" , "index.html"));
+  // SPA fallback: serve index.html for all unmatched routes
+  app.get("/*" , (req,res)=>{
+    res.sendFile(path.join(frontendDist, "index.html"));
   });
 }
 
-app.listen(3000, ()=>console.log(`server is running on port ${ENV.PORT} https://localhost:3000`));
+const PORT = ENV.PORT || 3000;
+app.listen(PORT, ()=>console.log(`server is running on port ${PORT} https://localhost:${PORT}`));
 
