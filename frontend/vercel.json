@@ -1,0 +1,18 @@
+{
+  "buildCommand": "npm install && npm run build",
+  "outputDirectory": "dist",
+  "env": {
+    "VITE_API_URL": "https://your-backend-domain.com"
+  },
+  "routes": [
+    {
+      "src": "^/(?!.*\\.).*$",
+      "destination": "/index.html"
+    },
+    {
+      "src": "/.*",
+      "status": 404,
+      "destination": "/404.html"
+    }
+  ]
+}

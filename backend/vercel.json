@@ -1,0 +1,23 @@
+{
+  "buildCommand": "npm install && npm run build",
+  "outputDirectory": "dist",
+  "env": {
+    "NODE_ENV": "production"
+  },
+  "functions": {
+    "src/server.js": {
+      "maxDuration": 60,
+      "memory": 1024
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/src/server.js"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/src/server.js"
+    }
+  ]
+}
