@@ -9,7 +9,8 @@ import { functions } from './lib/inngest.js';
 const app = express();
 
 
-const __dirname=path.resolve();
+const __dirname = path.resolve();
+const PORT  = ENV.PORT || 3000;
 
 app.use(express.json())
 app.use(cors({origin:ENV.CLIENT_URL,credentials:true}));//credentials:true = allows browser to include cookies on request
@@ -36,8 +37,8 @@ if(ENV.NODE_ENV === "production"){
 const Startserver = async() =>{
   try {
     await connectDB();
-    app.listen(3000, ()=>{
-    console.log(`server is running on port ${ENV.PORT} https://localhost:3000`);
+    app.listen(PORT, ()=>{
+    console.log(`server is running`);
     connectDB();
     });
   } catch (error) {
